@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>GlowZone 360 Score Card</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="title-wrap">
+        <div class="score-title">SCORE CARD</div>
+        <div class="mini-text">Mini-golf score tracker</div>
+      </div>
+
+      <div class="brand-wrap">
+        <div class="brand-line">
+          <span class="glow">GLOW</span><span class="zone">ZONE</span><span class="degrees">360°</span>
+        </div>
+        <div class="brand-sub">active entertainment</div>
+      </div>
+    </header>
+
+    <section class="controls">
+      <button id="scorecardViewBtn" class="nav-btn active">Scorecard</button>
+      <button id="rulesViewBtn" class="nav-btn">Rules</button>
+      <button id="themeBtn" class="nav-btn">Dark Mode</button>
+    </section>
+
+    <section class="player-controls">
+      <button id="addPlayerBtn" class="action-btn primary">+ Add Player</button>
+      <button id="removePlayerBtn" class="action-btn">Remove Last</button>
+    </section>
+
+    <main>
+      <section id="scorecardView" class="view active-view">
+        <div class="table-card">
+          <div class="table-wrap">
+            <table>
+              <thead id="scoreHead"></thead>
+              <tbody id="scoreBody"></tbody>
+              <tfoot id="scoreFoot"></tfoot>
+            </table>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-title">Players</div>
+          <div id="summaryList" class="summary-list"></div>
+        </div>
+      </section>
+
+      <section id="rulesView" class="view">
+        <div class="rules-card">
+          <h2>Rules of Play</h2>
+          <ul>
+            <li>Max 4 people per group</li>
+            <li>Max 6 strokes per hole</li>
+            <li>Ball is out of bounds if it lands off the golf area of the hole being played. Place the ball back where it went out of bounds and take a 1 stroke penalty.</li>
+            <li>A player may move the ball 1 putter head in length away from all obstructions without improving their shot to the hole.</li>
+            <li>Do not interfere with play on other holes</li>
+          </ul>
+
+          <h2>Play Safe</h2>
+          <ul>
+            <li>Hitting the ball gently</li>
+            <li>Keeping the putter head below your ankles at all times</li>
+            <li>Not running or jumping on the course</li>
+            <li>Not climbing on props or walls</li>
+          </ul>
+
+          <p class="warning">Dangerous play will result in expulsion from the course!</p>
+
+          <div class="combo-box">
+            <div class="combo-title">THE 360° COMBO</div>
+            <div class="combo-sub">GET THE FULL EXPERIENCE FOR ONLY $15.99</div>
+            <div class="combo-item">1 Round of Mini-Golf</div>
+            <div class="combo-item">1 Game of Laser Tag</div>
+            <div class="combo-item">$5 Game Card</div>
+            <div class="site">GLOWZONE360.COM</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
