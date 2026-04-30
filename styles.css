@@ -1,33 +1,9 @@
 :root {
-  --page-bg: linear-gradient(180deg, #5f5f5f 0%, #8c8c8c 100%);
-  --shell-bg: linear-gradient(180deg, #24388f 0%, #172865 100%);
-  --panel: #ffffff;
-  --panel-soft: #f3f5fc;
-  --text: #16203d;
-  --muted: #6b7291;
-  --line: #263572;
-  --deep-blue: #1a2865;
-  --mid-blue: #24388f;
-  --light-blue: #66dfff;
-  --summary-outline: #24388f;
-  --input-text: #575d76;
-  --shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
-}
-
-body.dark {
-  --page-bg: linear-gradient(180deg, #0b1020 0%, #151d36 100%);
-  --shell-bg: linear-gradient(180deg, #0d173b 0%, #091024 100%);
-  --panel: #11192f;
-  --panel-soft: #17203a;
-  --text: #eef2ff;
-  --muted: #b5c0ea;
-  --line: #45558f;
-  --deep-blue: #0a2343;
-  --mid-blue: #7fe6ff;
-  --light-blue: #92f2ff;
-  --summary-outline: #7fe6ff;
-  --input-text: #eef2ff;
-  --shadow: 0 18px 38px rgba(0, 0, 0, 0.45);
+  --red: #EA2128;
+  --blue: #2E368F;
+  --cyan: #4bdfff;
+  --white: #ffffff;
+  --line: #263aa0;
 }
 
 * {
@@ -42,129 +18,104 @@ body {
 }
 
 body {
-  background: var(--page-bg);
-  color: var(--text);
-  padding: 12px;
+  background: url("GlowZone360-Wallpaper2.jpg") center/cover fixed no-repeat;
+  color: var(--white);
+  padding: 10px;
 }
 
-.app-shell {
-  max-width: 1200px;
+.app {
+  width: min(1200px, 100%);
   margin: 0 auto;
-  background: var(--shell-bg);
-  border-radius: 24px;
-  padding: 14px;
-  box-shadow: var(--shadow);
+  min-height: 100vh;
+  border: 4px solid white;
+  background: rgba(15, 18, 90, 0.55);
+  backdrop-filter: blur(1px);
 }
 
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  color: #fff;
-  margin-bottom: 12px;
+.score-panel,
+.rules-panel {
+  padding: 22px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(46, 54, 143, 0.76), rgba(95, 20, 120, 0.76));
 }
 
-.score-title {
-  font-size: clamp(32px, 7vw, 56px);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: 1px;
-}
-
-.mini-text {
-  margin-top: 6px;
-  font-size: 13px;
-  opacity: 0.9;
-}
-
-.brand-line {
-  text-align: right;
-  font-size: clamp(26px, 6vw, 42px);
-  font-weight: 900;
-  line-height: 1;
-}
-
-.degrees {
-  font-size: 0.5em;
-  vertical-align: top;
-  margin-left: 2px;
-}
-
-.brand-sub {
-  text-align: right;
-  margin-top: 4px;
-  font-size: 12px;
-  opacity: 0.92;
-}
-
-.controls,
-.player-controls {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-
-.nav-btn,
-.action-btn {
-  border: none;
-  border-radius: 14px;
-  min-height: 48px;
-  padding: 12px 16px;
-  font-size: 15px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.nav-btn {
-  background: rgba(255, 255, 255, 0.95);
-  color: #24388f;
-}
-
-.nav-btn.active {
-  background: var(--light-blue);
-  color: #08111d;
-}
-
-.action-btn {
-  background: rgba(255, 255, 255, 0.92);
-  color: #24388f;
-}
-
-.action-btn.primary {
-  background: #ffffff;
-}
-
-.view {
+.hidden {
   display: none;
 }
 
-.view.active-view {
+.score-header {
+  display: grid;
+  grid-template-columns: 0.75fr 1.25fr;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.score-header h1 {
+  margin: 0;
+  color: white;
+  font-size: clamp(42px, 6vw, 70px);
+  line-height: 0.9;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.logo-box,
+.rules-logo {
+  background: white;
+  border-radius: 6px;
+  padding: 10px;
+  box-shadow: 0 0 18px rgba(255,255,255,0.6);
+}
+
+.logo-box img,
+.rules-logo img {
+  width: 100%;
   display: block;
 }
 
-.table-card,
-.summary-card,
-.rules-card {
-  background: var(--panel);
-  border-radius: 18px;
+.controls {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 13px 10px;
+  font-size: 15px;
+  font-weight: 900;
+  color: white;
+  background: var(--red);
+  cursor: pointer;
+}
+
+button:nth-child(1),
+button:nth-child(4) {
+  background: var(--blue);
+}
+
+.back-btn {
+  margin-bottom: 18px;
+  background: var(--red);
 }
 
 .table-card {
-  padding: 12px;
+  background: white;
+  padding: 8px;
+  border: 4px solid white;
 }
 
 .table-wrap {
   overflow-x: auto;
-  border: 8px solid var(--deep-blue);
-  border-radius: 16px;
-  background: var(--panel);
-  -webkit-overflow-scrolling: touch;
+  background: white;
 }
 
 table {
   width: 100%;
-  min-width: 720px;
+  min-width: 650px;
   border-collapse: collapse;
   table-layout: fixed;
 }
@@ -172,46 +123,42 @@ table {
 th,
 td {
   border: 2px solid var(--line);
+  height: 49px;
   text-align: center;
-  height: 54px;
-  padding: 6px 4px;
-  background: var(--panel);
-  color: var(--text);
+  background: rgba(255,255,255,0.94);
+  color: var(--blue);
+  font-weight: 900;
+  padding: 4px;
 }
 
 th {
-  font-size: 15px;
-  font-weight: 900;
+  font-size: 20px;
 }
 
 .hole-col {
-  width: 82px;
+  width: 90px;
 }
 
 .par-col {
-  width: 66px;
+  width: 70px;
 }
 
 .player-col {
-  width: 110px;
+  width: 120px;
 }
 
-.hole-pill {
+.hole-flag {
   display: inline-flex;
+  width: 52px;
+  height: 34px;
   align-items: center;
   justify-content: center;
-  min-width: 38px;
-  min-height: 30px;
-  padding: 0 10px;
-  border-radius: 999px;
-  background: var(--deep-blue);
-  color: #fff;
+  color: white;
+  background: var(--blue);
+  clip-path: polygon(0 8%, 78% 8%, 100% 50%, 78% 92%, 0 92%);
+  font-size: 24px;
   font-weight: 900;
-}
-
-body.dark .hole-pill {
-  background: var(--light-blue);
-  color: #07101a;
+  transform: rotate(-4deg);
 }
 
 .player-name-input {
@@ -219,165 +166,208 @@ body.dark .hole-pill {
   border: none;
   outline: none;
   background: transparent;
-  color: var(--text);
   text-align: center;
-  font: inherit;
-  font-weight: 800;
+  color: #7078a8;
+  font-size: 20px;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .score-input {
-  width: 70px;
-  max-width: 100%;
+  width: 58px;
   border: none;
   outline: none;
   background: transparent;
-  color: var(--input-text);
   text-align: center;
+  color: var(--blue);
   font-size: 24px;
-  font-weight: 500;
+  font-weight: 900;
+}
+
+.score-input::-webkit-inner-spin-button,
+.score-input::-webkit-outer-spin-button {
+  appearance: none;
 }
 
 .summary-row td {
-  background: var(--panel-soft);
-  font-weight: 900;
+  height: 44px;
+  background: #e9eaf6;
+  color: var(--blue);
+  font-size: 17px;
 }
 
 .summary-card {
   margin-top: 12px;
   padding: 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.95);
+  color: var(--blue);
 }
 
-.summary-title,
-.rules-card h2 {
-  margin: 0 0 12px;
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--mid-blue);
+.summary-card h2 {
+  margin: 0 0 10px;
 }
 
-.summary-list {
+#summaryList {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .summary-item {
-  background: var(--panel-soft);
-  border-radius: 14px;
-  padding: 12px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #eef0ff;
+  color: var(--blue);
+  font-weight: 900;
 }
 
 .summary-item.leading {
-  outline: 2px solid var(--summary-outline);
+  outline: 3px solid var(--red);
 }
 
-.summary-name {
-  font-size: 18px;
-  font-weight: 900;
-  margin-bottom: 6px;
+.rules-logo {
+  width: min(460px, 100%);
+  margin: 0 auto 22px;
 }
 
-.summary-data {
-  display: grid;
-  gap: 4px;
-  font-size: 14px;
-  color: var(--muted);
-}
-
-.rules-card {
-  padding: 16px;
-}
-
-.rules-card ul {
-  margin: 0 0 14px;
-  padding-left: 18px;
-}
-
-.rules-card li {
-  margin-bottom: 8px;
-  line-height: 1.35;
-}
-
-.warning {
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.combo-box {
-  margin-top: 14px;
-  border-radius: 16px;
-  padding: 14px;
-  background: linear-gradient(180deg, #6fe4ff 0%, #38c8f3 100%);
-  color: #10214d;
-}
-
-.combo-title {
-  font-size: 30px;
-  line-height: 0.95;
+.rules-panel h2 {
+  color: var(--cyan);
+  font-size: clamp(27px, 4vw, 38px);
+  line-height: 1.1;
+  margin: 18px 0 12px;
   font-weight: 900;
 }
 
-.combo-sub {
-  margin: 8px 0 12px;
-  font-size: 15px;
+.rules-panel ul {
+  margin: 0;
+  padding-left: 26px;
+  font-size: clamp(19px, 2.2vw, 27px);
+  line-height: 1.32;
   font-weight: 800;
 }
 
-.combo-item {
-  padding: 6px 0;
-  font-weight: 700;
+.rules-panel li {
+  margin-bottom: 10px;
 }
 
-.site {
-  margin-top: 12px;
-  text-align: center;
+.rules-panel li::marker {
+  color: var(--red);
+}
+
+.red-line {
+  height: 4px;
+  background: var(--red);
+  margin: 24px 0;
+}
+
+.danger {
+  color: var(--red);
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.15;
   font-weight: 900;
+  margin: 24px 0;
+}
+
+.combo-box {
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #5be7ff, #1382d7);
+  color: white;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.combo-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.combo-left,
+.combo-right {
+  padding: 18px;
+  font-weight: 900;
+}
+
+.combo-left {
+  color: var(--blue);
+  font-size: clamp(31px, 4vw, 52px);
+  line-height: 0.95;
+}
+
+.combo-right {
+  background: var(--blue);
+  font-size: clamp(18px, 2.2vw, 28px);
+  line-height: 1.1;
+}
+
+.combo-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-top: 3px solid rgba(255,255,255,0.7);
+}
+
+.combo-items div {
+  padding: 16px 8px;
+  text-align: center;
+  font-size: clamp(15px, 2vw, 22px);
+  font-weight: 900;
+  border-right: 3px solid rgba(255,255,255,0.7);
+}
+
+.combo-items div:last-child {
+  border-right: none;
+}
+
+.website {
+  text-align: center;
+  margin-top: 20px;
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 900;
+  letter-spacing: 1px;
 }
 
 @media (max-width: 700px) {
   body {
-    padding: 8px;
+    padding: 0;
   }
 
-  .app-shell {
-    padding: 10px;
-    border-radius: 18px;
+  .app {
+    border: none;
   }
 
-  .topbar {
-    flex-direction: column;
-    gap: 8px;
+  .score-panel,
+  .rules-panel {
+    padding: 12px;
   }
 
-  .brand-line,
-  .brand-sub {
-    text-align: left;
+  .score-header {
+    grid-template-columns: 1fr;
   }
 
-  .controls,
-  .player-controls {
-    display: grid;
+  .logo-box {
+    max-width: 420px;
+  }
+
+  .controls {
     grid-template-columns: 1fr 1fr;
   }
 
-  .controls .nav-btn:last-child,
-  .player-controls .action-btn:first-child {
-    grid-column: span 2;
-  }
-
-  .nav-btn,
-  .action-btn {
-    min-height: 50px;
-    font-size: 15px;
+  table {
+    min-width: 620px;
   }
 
   th,
   td {
-    height: 50px;
-    font-size: 14px;
+    height: 45px;
   }
 
-  .score-input {
-    width: 60px;
-    font-size: 22px;
+  .combo-top {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-item {
+    grid-template-columns: 1fr;
   }
 }
