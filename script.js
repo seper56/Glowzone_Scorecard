@@ -8,19 +8,22 @@ let players = [
   { id: 4, name: "NAME", scores: Array(18).fill("") }
 ];
 
+const maxPlayers = 5;
+
 const scorePanel = document.getElementById("scorePanel");
 const rulesPanel = document.getElementById("rulesPanel");
-
 const scoreHead = document.getElementById("scoreHead");
 const scoreBody = document.getElementById("scoreBody");
 const scoreFoot = document.getElementById("scoreFoot");
 const summaryList = document.getElementById("summaryList");
+const leaderText = document.getElementById("leaderText");
 
 const addPlayerBtn = document.getElementById("addPlayerBtn");
 const removePlayerBtn = document.getElementById("removePlayerBtn");
 const rulesViewBtn = document.getElementById("rulesViewBtn");
 const scorecardViewBtn = document.getElementById("scorecardViewBtn");
 const backToScorecardBtn = document.getElementById("backToScorecardBtn");
+const shareBtn = document.getElementById("shareBtn");
 
 function sumScores(scores, start, end) {
   let total = 0;
@@ -40,6 +43,41 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+function getStats() {
+  return players.map((player) => {
+    const front = sumScores(player.scores, 0, 8);
+    const back = sumScores(player.scores, 9, 17);
+    const total = front + back;
+    const hasAny = player.scores.some((score) => score !== "");
+
+    return {
+      id: player.id,
+      name: player.name.trim() || "NAME",
+      front,
+      back,
+      total,
+      hasAny
+    };
+  });
+}
+
+function getLeader() {
+  const ranked = getStats()
+    .filter((player) => player.hasAny)
+    .sort((a, b) => a.total - b.total);
+
+  return ranked[0] || null;
+}
+
+function scoreClass(score, par) {
+  if (score === "") return "";
+  const number = parseInt(score, 10);
+  if (Number.isNaN(number)) return "";
+  if (number < par) return "under-par";
+  if (number > par) return "over-par";
+  return "at-par";
 }
 
 function renderHeader() {
@@ -67,8 +105,11 @@ function renderHeader() {
       const player = players.find((p) => p.id === Number(event.target.dataset.playerId));
       if (!player) return;
 
-      player.name = event.target.value;
+      player.name = event.target.value.toUpperCase();
+      event.target.value = player.name;
+
       renderSummary();
+      renderLeader();
     });
   });
 }
@@ -94,7 +135,7 @@ function renderBody() {
         ${players.map((player) => `
           <td>
             <input
-              class="score-input"
+              class="score-input ${scoreClass(player.scores[holeIndex], pars[holeIndex])}"
               type="number"
               min="0"
               inputmode="numeric"
@@ -109,7 +150,7 @@ function renderBody() {
     `;
 
     if (holeIndex === 8) {
-      html += makeSummaryRow("FRONT 9", 27, 0, 8);
+      html += makeSummaryRow("FRONT", 27, 0, 8);
     }
   });
 
@@ -119,14 +160,15 @@ function renderBody() {
 
 function renderFoot() {
   scoreFoot.innerHTML =
-    makeSummaryRow("BACK 9", 26, 9, 17) +
+    makeSummaryRow("BACK", 26, 9, 17) +
     makeSummaryRow("TOTAL", 53, 0, 17);
 }
 
 function updateSummaryRowsOnly() {
   const frontRow = scoreBody.querySelector(".summary-row");
+
   if (frontRow) {
-    frontRow.outerHTML = makeSummaryRow("FRONT 9", 27, 0, 8);
+    frontRow.outerHTML = makeSummaryRow("FRONT", 27, 0, 8);
   }
 
   renderFoot();
@@ -142,46 +184,42 @@ function attachScoreEvents() {
 
       player.scores[holeIndex] = event.target.value;
 
+      event.target.classList.remove("under-par", "over-par", "at-par");
+      const newClass = scoreClass(event.target.value, pars[holeIndex]);
+      if (newClass) event.target.classList.add(newClass);
+
       updateSummaryRowsOnly();
       renderSummary();
+      renderLeader();
     });
   });
 }
 
 function renderSummary() {
-  const stats = players.map((player) => {
-    const front = sumScores(player.scores, 0, 8);
-    const back = sumScores(player.scores, 9, 17);
-    const total = front + back;
-    const hasAny = player.scores.some((score) => score !== "");
-
-    return {
-      name: player.name.trim() || "NAME",
-      front,
-      back,
-      total,
-      hasAny
-    };
-  });
-
-  const ranked = [...stats]
-    .filter((player) => player.hasAny)
-    .sort((a, b) => a.total - b.total);
+  const stats = getStats();
+  const leader = getLeader();
 
   summaryList.innerHTML = stats.map((player) => {
-    const isLeader =
-      ranked.length > 0 &&
-      player.hasAny &&
-      ranked[0].name === player.name &&
-      ranked[0].total === player.total;
+    const isLeader = leader && player.hasAny && player.id === leader.id;
 
     return `
       <div class="summary-item${isLeader ? " leading" : ""}">
         <div>${escapeHtml(player.name)}</div>
-        <div>F9: ${player.front} | B9: ${player.back} | Total: ${player.total}</div>
+        <div>Front: ${player.front} | Back: ${player.back} | Total: ${player.total}</div>
       </div>
     `;
   }).join("");
+}
+
+function renderLeader() {
+  const leader = getLeader();
+
+  if (!leader) {
+    leaderText.textContent = "Enter scores to see who’s winning";
+    return;
+  }
+
+  leaderText.textContent = `${leader.name} is leading with ${leader.total}`;
 }
 
 function renderEverything() {
@@ -189,9 +227,15 @@ function renderEverything() {
   renderBody();
   renderFoot();
   renderSummary();
+  renderLeader();
 }
 
 function addPlayer() {
+  if (players.length >= maxPlayers) {
+    alert("Max 5 players for this version.");
+    return;
+  }
+
   players.push({
     id: Date.now(),
     name: "NAME",
@@ -220,11 +264,34 @@ function showScorecard() {
   window.scrollTo(0, 0);
 }
 
+function shareWinner() {
+  const leader = getLeader();
+
+  if (!leader) {
+    alert("Enter scores first.");
+    return;
+  }
+
+  const message = `🏆 ${leader.name} is winning at GlowZone 360 with a score of ${leader.total}!`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: "GlowZone 360 Scorecard",
+      text: message,
+      url: window.location.href
+    });
+  } else {
+    navigator.clipboard.writeText(`${message} ${window.location.href}`);
+    alert("Winner message copied!");
+  }
+}
+
 addPlayerBtn.addEventListener("click", addPlayer);
 removePlayerBtn.addEventListener("click", removeLastPlayer);
 rulesViewBtn.addEventListener("click", showRules);
 scorecardViewBtn.addEventListener("click", showScorecard);
 backToScorecardBtn.addEventListener("click", showScorecard);
+shareBtn.addEventListener("click", shareWinner);
 
 renderEverything();
 showScorecard();
