@@ -12,11 +12,17 @@ const maxPlayers = 5;
 
 const scorePanel = document.getElementById("scorePanel");
 const rulesPanel = document.getElementById("rulesPanel");
+const winnerPage = document.getElementById("winnerPage");
+
 const scoreHead = document.getElementById("scoreHead");
 const scoreBody = document.getElementById("scoreBody");
 const scoreFoot = document.getElementById("scoreFoot");
 const summaryList = document.getElementById("summaryList");
 const leaderText = document.getElementById("leaderText");
+
+const winnerName = document.getElementById("winnerName");
+const winnerScore = document.getElementById("winnerScore");
+const winnerPlacements = document.getElementById("winnerPlacements");
 
 const addPlayerBtn = document.getElementById("addPlayerBtn");
 const removePlayerBtn = document.getElementById("removePlayerBtn");
@@ -24,6 +30,9 @@ const rulesViewBtn = document.getElementById("rulesViewBtn");
 const scorecardViewBtn = document.getElementById("scorecardViewBtn");
 const backToScorecardBtn = document.getElementById("backToScorecardBtn");
 const shareBtn = document.getElementById("shareBtn");
+const finishGameBtn = document.getElementById("finishGameBtn");
+const playAgainBtn = document.getElementById("playAgainBtn");
+const winnerShareBtn = document.getElementById("winnerShareBtn");
 
 function sumScores(scores, start, end) {
   let total = 0;
@@ -252,19 +261,62 @@ function removeLastPlayer() {
   renderEverything();
 }
 
+function showScorecard() {
+  scorePanel.classList.remove("hidden");
+  rulesPanel.classList.add("hidden");
+  winnerPage.classList.add("hidden");
+  window.scrollTo(0, 0);
+}
+
 function showRules() {
   scorePanel.classList.add("hidden");
   rulesPanel.classList.remove("hidden");
+  winnerPage.classList.add("hidden");
   window.scrollTo(0, 0);
 }
 
-function showScorecard() {
+function showWinnerPage() {
+  const ranked = getStats()
+    .filter((player) => player.hasAny)
+    .sort((a, b) => a.total - b.total);
+
+  if (ranked.length === 0) {
+    alert("Enter scores first.");
+    return;
+  }
+
+  const winner = ranked[0];
+
+  winnerName.textContent = winner.name;
+  winnerScore.textContent = `Winning Score: ${winner.total}`;
+
+  winnerPlacements.innerHTML = ranked.map((player, index) => `
+    <div class="place-row ${index === 0 ? "first" : ""}">
+      <div>
+        ${index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "🎯"}
+        ${escapeHtml(player.name)}
+      </div>
+
+      <div>${player.total}</div>
+    </div>
+  `).join("");
+
+  scorePanel.classList.add("hidden");
   rulesPanel.classList.add("hidden");
-  scorePanel.classList.remove("hidden");
+  winnerPage.classList.remove("hidden");
   window.scrollTo(0, 0);
 }
 
-function shareWinner() {
+function playAgain() {
+  players.forEach((player) => {
+    player.scores = Array(18).fill("");
+  });
+
+  renderEverything();
+  showScorecard();
+}
+
+function shareWinnerResult() {
   const leader = getLeader();
 
   if (!leader) {
@@ -272,11 +324,11 @@ function shareWinner() {
     return;
   }
 
-  const message = `🏆 ${leader.name} is winning at GlowZone 360 with a score of ${leader.total}!`;
+  const message = `🏆 ${leader.name} won at GlowZone 360 with a score of ${leader.total}!`;
 
   if (navigator.share) {
     navigator.share({
-      title: "GlowZone 360 Scorecard",
+      title: "GlowZone 360 Winner",
       text: message,
       url: window.location.href
     });
@@ -291,7 +343,10 @@ removePlayerBtn.addEventListener("click", removeLastPlayer);
 rulesViewBtn.addEventListener("click", showRules);
 scorecardViewBtn.addEventListener("click", showScorecard);
 backToScorecardBtn.addEventListener("click", showScorecard);
-shareBtn.addEventListener("click", shareWinner);
+shareBtn.addEventListener("click", shareWinnerResult);
+finishGameBtn.addEventListener("click", showWinnerPage);
+playAgainBtn.addEventListener("click", playAgain);
+winnerShareBtn.addEventListener("click", shareWinnerResult);
 
 renderEverything();
 showScorecard();
