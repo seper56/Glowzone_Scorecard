@@ -1,6 +1,7 @@
 const holes = Array.from({ length: 18 }, (_, i) => i + 1);
 const pars = [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2];
 
+let selectedLocation = "";
 let players = [
   { id: 1, name: "NAME", scores: Array(18).fill("") },
   { id: 2, name: "NAME", scores: Array(18).fill("") },
@@ -10,10 +11,13 @@ let players = [
 
 const maxPlayers = 5;
 
+const landingPage = document.getElementById("landingPage");
+const locationPage = document.getElementById("locationPage");
 const scorePanel = document.getElementById("scorePanel");
 const rulesPanel = document.getElementById("rulesPanel");
 const winnerPage = document.getElementById("winnerPage");
 
+const locationText = document.getElementById("locationText");
 const scoreHead = document.getElementById("scoreHead");
 const scoreBody = document.getElementById("scoreBody");
 const scoreFoot = document.getElementById("scoreFoot");
@@ -22,17 +26,54 @@ const leaderText = document.getElementById("leaderText");
 
 const winnerName = document.getElementById("winnerName");
 const winnerScore = document.getElementById("winnerScore");
+const winnerLocation = document.getElementById("winnerLocation");
 const winnerPlacements = document.getElementById("winnerPlacements");
 
+const startGameBtn = document.getElementById("startGameBtn");
+const backToLandingBtn = document.getElementById("backToLandingBtn");
+const homeBtn = document.getElementById("homeBtn");
 const addPlayerBtn = document.getElementById("addPlayerBtn");
 const removePlayerBtn = document.getElementById("removePlayerBtn");
 const rulesViewBtn = document.getElementById("rulesViewBtn");
-const scorecardViewBtn = document.getElementById("scorecardViewBtn");
 const backToScorecardBtn = document.getElementById("backToScorecardBtn");
 const shareBtn = document.getElementById("shareBtn");
 const finishGameBtn = document.getElementById("finishGameBtn");
 const playAgainBtn = document.getElementById("playAgainBtn");
+const newGameBtn = document.getElementById("newGameBtn");
 const winnerShareBtn = document.getElementById("winnerShareBtn");
+
+function hideAllPages() {
+  landingPage.classList.add("hidden");
+  locationPage.classList.add("hidden");
+  scorePanel.classList.add("hidden");
+  rulesPanel.classList.add("hidden");
+  winnerPage.classList.add("hidden");
+}
+
+function showLanding() {
+  hideAllPages();
+  landingPage.classList.remove("hidden");
+  window.scrollTo(0, 0);
+}
+
+function showLocation() {
+  hideAllPages();
+  locationPage.classList.remove("hidden");
+  window.scrollTo(0, 0);
+}
+
+function showScorecard() {
+  hideAllPages();
+  scorePanel.classList.remove("hidden");
+  locationText.textContent = selectedLocation ? `Location: ${selectedLocation}` : "Location: Not Selected";
+  window.scrollTo(0, 0);
+}
+
+function showRules() {
+  hideAllPages();
+  rulesPanel.classList.remove("hidden");
+  window.scrollTo(0, 0);
+}
 
 function sumScores(scores, start, end) {
   let total = 0;
@@ -261,20 +302,6 @@ function removeLastPlayer() {
   renderEverything();
 }
 
-function showScorecard() {
-  scorePanel.classList.remove("hidden");
-  rulesPanel.classList.add("hidden");
-  winnerPage.classList.add("hidden");
-  window.scrollTo(0, 0);
-}
-
-function showRules() {
-  scorePanel.classList.add("hidden");
-  rulesPanel.classList.remove("hidden");
-  winnerPage.classList.add("hidden");
-  window.scrollTo(0, 0);
-}
-
 function showWinnerPage() {
   const ranked = getStats()
     .filter((player) => player.hasAny)
@@ -289,6 +316,7 @@ function showWinnerPage() {
 
   winnerName.textContent = winner.name;
   winnerScore.textContent = `Winning Score: ${winner.total}`;
+  winnerLocation.textContent = selectedLocation ? `Played at GlowZone 360 ${selectedLocation}` : "GlowZone 360";
 
   winnerPlacements.innerHTML = ranked.map((player, index) => `
     <div class="place-row ${index === 0 ? "first" : ""}">
@@ -301,19 +329,35 @@ function showWinnerPage() {
     </div>
   `).join("");
 
-  scorePanel.classList.add("hidden");
-  rulesPanel.classList.add("hidden");
+  hideAllPages();
   winnerPage.classList.remove("hidden");
   window.scrollTo(0, 0);
 }
 
-function playAgain() {
+function resetScores() {
   players.forEach((player) => {
     player.scores = Array(18).fill("");
   });
 
   renderEverything();
+}
+
+function playAgain() {
+  resetScores();
   showScorecard();
+}
+
+function newGame() {
+  selectedLocation = "";
+  players = [
+    { id: 1, name: "NAME", scores: Array(18).fill("") },
+    { id: 2, name: "NAME", scores: Array(18).fill("") },
+    { id: 3, name: "NAME", scores: Array(18).fill("") },
+    { id: 4, name: "NAME", scores: Array(18).fill("") }
+  ];
+
+  renderEverything();
+  showLanding();
 }
 
 function shareWinnerResult() {
@@ -324,7 +368,8 @@ function shareWinnerResult() {
     return;
   }
 
-  const message = `🏆 ${leader.name} won at GlowZone 360 with a score of ${leader.total}!`;
+  const locationPart = selectedLocation ? ` at GlowZone 360 ${selectedLocation}` : " at GlowZone 360";
+  const message = `🏆 ${leader.name} won${locationPart} with a score of ${leader.total}!`;
 
   if (navigator.share) {
     navigator.share({
@@ -338,15 +383,26 @@ function shareWinnerResult() {
   }
 }
 
+startGameBtn.addEventListener("click", showLocation);
+backToLandingBtn.addEventListener("click", showLanding);
+homeBtn.addEventListener("click", showLanding);
 addPlayerBtn.addEventListener("click", addPlayer);
 removePlayerBtn.addEventListener("click", removeLastPlayer);
 rulesViewBtn.addEventListener("click", showRules);
-scorecardViewBtn.addEventListener("click", showScorecard);
 backToScorecardBtn.addEventListener("click", showScorecard);
 shareBtn.addEventListener("click", shareWinnerResult);
 finishGameBtn.addEventListener("click", showWinnerPage);
 playAgainBtn.addEventListener("click", playAgain);
+newGameBtn.addEventListener("click", newGame);
 winnerShareBtn.addEventListener("click", shareWinnerResult);
 
+document.querySelectorAll(".location-btn").forEach((button) => {
+  button.addEventListener("click", () => {
+    selectedLocation = button.dataset.location;
+    renderEverything();
+    showScorecard();
+  });
+});
+
 renderEverything();
-showScorecard();
+showLanding();

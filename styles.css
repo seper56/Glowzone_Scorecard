@@ -32,6 +32,12 @@ body {
   background: rgba(15, 18, 90, 0.55);
 }
 
+.hidden {
+  display: none !important;
+}
+
+.landing-page,
+.location-page,
 .score-panel,
 .rules-panel,
 .winner-page {
@@ -40,8 +46,66 @@ body {
   background: linear-gradient(180deg, rgba(46, 54, 143, 0.78), rgba(95, 20, 120, 0.78));
 }
 
-.hidden {
-  display: none;
+.landing-page,
+.location-page,
+.winner-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing-card,
+.location-card,
+.winner-card {
+  width: min(720px, 100%);
+  background: rgba(255,255,255,0.96);
+  border-radius: 24px;
+  padding: 30px 24px;
+  text-align: center;
+  color: var(--blue);
+  box-shadow: 0 0 35px rgba(255,255,255,0.3);
+  border: 5px solid var(--red);
+}
+
+.landing-logo,
+.winner-logo {
+  max-width: 300px;
+  margin: 0 auto 20px;
+  background: white;
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: 0 0 20px rgba(46,54,143,0.25);
+}
+
+.landing-logo img,
+.winner-logo img {
+  width: 100%;
+  display: block;
+}
+
+.landing-card h1,
+.location-card h1 {
+  font-size: clamp(36px, 6vw, 64px);
+  margin: 0 0 12px;
+  color: var(--red);
+  font-weight: 900;
+}
+
+.landing-card p {
+  font-size: clamp(18px, 3vw, 26px);
+  font-weight: 800;
+  margin-bottom: 24px;
+}
+
+.location-buttons {
+  display: grid;
+  gap: 14px;
+  margin: 24px 0;
+}
+
+.location-btn {
+  font-size: 24px;
+  padding: 18px;
 }
 
 .top-header {
@@ -62,6 +126,13 @@ body {
   line-height: 1;
   font-weight: 900;
   letter-spacing: 1px;
+}
+
+.location-text {
+  margin-top: 4px;
+  color: var(--red);
+  font-weight: 900;
+  font-size: 15px;
 }
 
 .logo-box {
@@ -101,7 +172,8 @@ button,
 
 button:nth-child(1),
 button:nth-child(4),
-.site-btn {
+.site-btn,
+.secondary-btn {
   background: var(--blue);
 }
 
@@ -279,7 +351,7 @@ th {
 }
 
 @keyframes promoPulse {
-  0% {
+  0%, 100% {
     transform: scale(1);
     opacity: 1;
   }
@@ -287,11 +359,6 @@ th {
   50% {
     transform: scale(1.02);
     opacity: 0.96;
-  }
-
-  100% {
-    transform: scale(1);
-    opacity: 1;
   }
 }
 
@@ -380,55 +447,6 @@ th {
   margin: 24px 0;
 }
 
-.combo-box {
-  border-radius: 14px;
-  overflow: hidden;
-  background: linear-gradient(135deg, #5be7ff, #1382d7);
-  color: white;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-}
-
-.combo-top {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.combo-left,
-.combo-right {
-  padding: 18px;
-  font-weight: 900;
-}
-
-.combo-left {
-  color: var(--blue);
-  font-size: clamp(31px, 4vw, 52px);
-  line-height: 0.95;
-}
-
-.combo-right {
-  background: var(--blue);
-  font-size: clamp(18px, 2.2vw, 28px);
-  line-height: 1.1;
-}
-
-.combo-items {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  border-top: 3px solid rgba(255,255,255,0.7);
-}
-
-.combo-items div {
-  padding: 16px 8px;
-  text-align: center;
-  font-size: clamp(15px, 2vw, 22px);
-  font-weight: 900;
-  border-right: 3px solid rgba(255,255,255,0.7);
-}
-
-.combo-items div:last-child {
-  border-right: none;
-}
-
 .website {
   margin-top: 18px;
   width: 100%;
@@ -437,22 +455,8 @@ th {
   letter-spacing: 1px;
 }
 
-.winner-page {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .winner-card {
-  width: min(700px, 100%);
-  background: rgba(255,255,255,0.96);
-  border-radius: 24px;
-  padding: 30px 24px;
-  text-align: center;
-  color: var(--blue);
-  box-shadow: 0 0 35px rgba(255,255,255,0.3);
   animation: winnerPop 0.6s ease;
-  border: 5px solid var(--red);
 }
 
 @keyframes winnerPop {
@@ -465,20 +469,6 @@ th {
     transform: scale(1);
     opacity: 1;
   }
-}
-
-.winner-logo {
-  max-width: 280px;
-  margin: 0 auto 20px;
-  background: white;
-  border-radius: 14px;
-  padding: 10px;
-  box-shadow: 0 0 20px rgba(46,54,143,0.25);
-}
-
-.winner-logo img {
-  width: 100%;
-  display: block;
 }
 
 .winner-title {
@@ -497,10 +487,11 @@ th {
   text-transform: uppercase;
 }
 
-.winner-score {
-  font-size: clamp(24px, 4vw, 36px);
+.winner-score,
+.winner-location {
+  font-size: clamp(20px, 4vw, 32px);
   font-weight: 800;
-  margin-bottom: 24px;
+  margin-bottom: 14px;
 }
 
 .winner-placements {
@@ -526,7 +517,7 @@ th {
 
 .winner-buttons {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 12px;
   margin-top: 24px;
 }
@@ -560,6 +551,8 @@ th {
     border: none;
   }
 
+  .landing-page,
+  .location-page,
   .score-panel,
   .rules-panel,
   .winner-page {
@@ -629,9 +622,5 @@ th {
   .place-row {
     flex-direction: column;
     gap: 6px;
-  }
-
-  .combo-top {
-    grid-template-columns: 1fr;
   }
 }

@@ -8,9 +8,43 @@
 </head>
 <body>
   <main class="app">
-    <section id="scorePanel" class="score-panel">
+
+    <section id="landingPage" class="landing-page">
+      <div class="landing-card">
+        <div class="landing-logo">
+          <img src="GlowZone360-LOGO-PNG.png" alt="Glow Zone 360 Logo" />
+        </div>
+
+        <h1>Digital Scorecard</h1>
+        <p>Track your mini-golf game, show off the winner, and share your GlowZone 360 score.</p>
+
+        <button id="startGameBtn" class="main-btn">Start Game</button>
+      </div>
+    </section>
+
+    <section id="locationPage" class="location-page hidden">
+      <div class="location-card">
+        <div class="landing-logo">
+          <img src="GlowZone360-LOGO-PNG.png" alt="Glow Zone 360 Logo" />
+        </div>
+
+        <h1>Choose Location</h1>
+
+        <div class="location-buttons">
+          <button class="location-btn" data-location="Brampton">Brampton</button>
+          <button class="location-btn" data-location="Mississauga">Mississauga</button>
+        </div>
+
+        <button id="backToLandingBtn" class="secondary-btn">← Back</button>
+      </div>
+    </section>
+
+    <section id="scorePanel" class="score-panel hidden">
       <header class="top-header">
-        <h1>SCORE CARD</h1>
+        <div>
+          <h1>SCORE CARD</h1>
+          <div id="locationText" class="location-text">Location: Not Selected</div>
+        </div>
 
         <div class="logo-box">
           <img src="GlowZone360-LOGO-PNG.png" alt="Glow Zone 360 Logo" />
@@ -18,7 +52,7 @@
       </header>
 
       <section class="controls">
-        <button id="scorecardViewBtn">Scorecard</button>
+        <button id="homeBtn">Home</button>
         <button id="rulesViewBtn">Rules</button>
         <button id="addPlayerBtn">+ Player</button>
         <button id="removePlayerBtn">Remove</button>
@@ -85,19 +119,6 @@
 
       <p class="danger">DANGEROUS PLAY WILL RESULT IN EXPULSION FROM THE COURSE!</p>
 
-      <div class="combo-box">
-        <div class="combo-top">
-          <div class="combo-left">THE 360°<br>COMBO PLUS</div>
-          <div class="combo-right">GET THE FULL EXPERIENCE<br>FOR ONLY $19.99</div>
-        </div>
-
-        <div class="combo-items">
-          <div>1 ROUND OF<br>MINI-GOLF</div>
-          <div>1 GAME OF<br>LASER TAG</div>
-          <div>$10 GAME<br>CARD</div>
-        </div>
-      </div>
-
       <a class="website" href="https://glowzone360.com" target="_blank">GLOWZONE360.COM</a>
     </section>
 
@@ -111,15 +132,18 @@
 
         <div id="winnerName" class="winner-name">PLAYER</div>
         <div id="winnerScore" class="winner-score">Winning Score: 0</div>
+        <div id="winnerLocation" class="winner-location"></div>
 
         <div id="winnerPlacements" class="winner-placements"></div>
 
         <div class="winner-buttons">
           <button id="winnerShareBtn" class="main-btn">Share Result</button>
           <button id="playAgainBtn" class="secondary-btn">Play Again</button>
+          <button id="newGameBtn" class="main-btn">New Game</button>
         </div>
       </div>
     </section>
+
   </main>
 
   <script src="script.js"></script>
