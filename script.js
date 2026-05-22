@@ -3,10 +3,10 @@ const pars = [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2];
 
 let selectedLocation = "";
 let players = [
-  { id: 1, name: "NAME", scores: Array(18).fill("") },
-  { id: 2, name: "NAME", scores: Array(18).fill("") },
-  { id: 3, name: "NAME", scores: Array(18).fill("") },
-  { id: 4, name: "NAME", scores: Array(18).fill("") }
+  { id: 1, name: "NAME HERE", scores: Array(18).fill("") },
+  { id: 2, name: "NAME HERE", scores: Array(18).fill("") },
+  { id: 3, name: "NAME HERE", scores: Array(18).fill("") },
+  { id: 4, name: "NAME HERE", scores: Array(18).fill("") }
 ];
 
 const maxPlayers = 5;
@@ -104,7 +104,7 @@ function getStats() {
 
     return {
       id: player.id,
-      name: player.name.trim() || "NAME",
+      name: player.name.trim() || "NAME HERE",
       front,
       back,
       total,
@@ -151,6 +151,22 @@ function renderHeader() {
   `;
 
   document.querySelectorAll(".player-name-input").forEach((input) => {
+    input.addEventListener("focus", (event) => {
+      if (event.target.value === "NAME HERE") {
+        event.target.value = "";
+      }
+    });
+
+    input.addEventListener("blur", (event) => {
+      const player = players.find((p) => p.id === Number(event.target.dataset.playerId));
+      if (!player) return;
+
+      if (event.target.value.trim() === "") {
+        player.name = "NAME HERE";
+        event.target.value = "NAME HERE";
+      }
+    });
+
     input.addEventListener("input", (event) => {
       const player = players.find((p) => p.id === Number(event.target.dataset.playerId));
       if (!player) return;
@@ -288,7 +304,7 @@ function addPlayer() {
 
   players.push({
     id: Date.now(),
-    name: "NAME",
+    name: "NAME HERE",
     scores: Array(18).fill("")
   });
 
@@ -350,10 +366,10 @@ function playAgain() {
 function newGame() {
   selectedLocation = "";
   players = [
-    { id: 1, name: "NAME", scores: Array(18).fill("") },
-    { id: 2, name: "NAME", scores: Array(18).fill("") },
-    { id: 3, name: "NAME", scores: Array(18).fill("") },
-    { id: 4, name: "NAME", scores: Array(18).fill("") }
+    { id: 1, name: "NAME HERE", scores: Array(18).fill("") },
+    { id: 2, name: "NAME HERE", scores: Array(18).fill("") },
+    { id: 3, name: "NAME HERE", scores: Array(18).fill("") },
+    { id: 4, name: "NAME HERE", scores: Array(18).fill("") }
   ];
 
   renderEverything();
