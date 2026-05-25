@@ -1,5 +1,6 @@
 const holes = Array.from({ length: 18 }, (_, i) => i + 1);
 const pars = [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2];
+const storageKey = "glowzoneScorecardGame";
 
 let selectedLocation = "";
 let players = [
@@ -41,6 +42,45 @@ const finishGameBtn = document.getElementById("finishGameBtn");
 const playAgainBtn = document.getElementById("playAgainBtn");
 const newGameBtn = document.getElementById("newGameBtn");
 const winnerShareBtn = document.getElementById("winnerShareBtn");
+
+function saveGame() {
+  const gameData = {
+    selectedLocation,
+    players
+  };
+
+  localStorage.setItem(storageKey, JSON.stringify(gameData));
+}
+
+function loadGame() {
+  const savedGame = localStorage.getItem(storageKey);
+
+  if (!savedGame) return;
+
+  try {
+    const gameData = JSON.parse(savedGame);
+
+    if (gameData.selectedLocation) {
+      selectedLocation = gameData.selectedLocation;
+    }
+
+    if (Array.isArray(gameData.players) && gameData.players.length > 0) {
+      players = gameData.players.map((player, index) => ({
+        id: player.id || Date.now() + index,
+        name: player.name || "NAME HERE",
+        scores: Array.isArray(player.scores)
+          ? [...player.scores, ...Array(18).fill("")].slice(0, 18)
+          : Array(18).fill("")
+      }));
+    }
+  } catch {
+    localStorage.removeItem(storageKey);
+  }
+}
+
+function clearSavedGame() {
+  localStorage.removeItem(storageKey);
+}
 
 function hideAllPages() {
   landingPage.classList.add("hidden");
@@ -165,6 +205,10 @@ function renderHeader() {
         player.name = "NAME HERE";
         event.target.value = "NAME HERE";
       }
+
+      saveGame();
+      renderSummary();
+      renderLeader();
     });
 
     input.addEventListener("input", (event) => {
@@ -174,6 +218,7 @@ function renderHeader() {
       player.name = event.target.value.toUpperCase();
       event.target.value = player.name;
 
+      saveGame();
       renderSummary();
       renderLeader();
     });
@@ -254,6 +299,7 @@ function attachScoreEvents() {
       const newClass = scoreClass(event.target.value, pars[holeIndex]);
       if (newClass) event.target.classList.add(newClass);
 
+      saveGame();
       updateSummaryRowsOnly();
       renderSummary();
       renderLeader();
@@ -308,6 +354,7 @@ function addPlayer() {
     scores: Array(18).fill("")
   });
 
+  saveGame();
   renderEverything();
 }
 
@@ -315,6 +362,8 @@ function removeLastPlayer() {
   if (players.length <= 1) return;
 
   players.pop();
+
+  saveGame();
   renderEverything();
 }
 
@@ -355,6 +404,7 @@ function resetScores() {
     player.scores = Array(18).fill("");
   });
 
+  saveGame();
   renderEverything();
 }
 
@@ -372,6 +422,7 @@ function newGame() {
     { id: 4, name: "NAME HERE", scores: Array(18).fill("") }
   ];
 
+  clearSavedGame();
   renderEverything();
   showLanding();
 }
@@ -415,10 +466,17 @@ winnerShareBtn.addEventListener("click", shareWinnerResult);
 document.querySelectorAll(".location-btn").forEach((button) => {
   button.addEventListener("click", () => {
     selectedLocation = button.dataset.location;
+    saveGame();
     renderEverything();
     showScorecard();
   });
 });
 
+loadGame();
 renderEverything();
-showLanding();
+
+if (selectedLocation || players.some((player) => player.scores.some((score) => score !== "") || player.name !== "NAME HERE")) {
+  showScorecard();
+} else {
+  showLanding();
+}
