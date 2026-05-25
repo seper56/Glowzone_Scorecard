@@ -43,7 +43,11 @@ body {
 .winner-page {
   padding: 16px;
   min-height: 100vh;
-  background: linear-gradient(180deg, rgba(46, 54, 143, 0.78), rgba(95, 20, 120, 0.78));
+  background: linear-gradient(
+    180deg,
+    rgba(46, 54, 143, 0.78),
+    rgba(95, 20, 120, 0.78)
+  );
 }
 
 .landing-page,
@@ -113,7 +117,7 @@ body {
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 14px;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255,255,255,0.96);
   border-radius: 12px;
   padding: 10px 12px;
   margin-bottom: 12px;
@@ -139,7 +143,7 @@ body {
   background: var(--white);
   border-radius: 8px;
   padding: 6px;
-  box-shadow: 0 0 14px rgba(46, 54, 143, 0.35);
+  box-shadow: 0 0 14px rgba(46,54,143,0.35);
 }
 
 .logo-box img {
@@ -197,7 +201,7 @@ button:nth-child(4),
   padding: 10px 12px;
   margin-bottom: 10px;
   text-align: center;
-  box-shadow: 0 0 18px rgba(234, 33, 40, 0.35);
+  box-shadow: 0 0 18px rgba(234,33,40,0.35);
 }
 
 .leader-label {
@@ -212,7 +216,6 @@ button:nth-child(4),
   font-size: clamp(20px, 4vw, 34px);
   font-weight: 900;
 }
-
 .table-card {
   background: white;
   padding: 6px;
@@ -361,7 +364,6 @@ th {
     opacity: 0.96;
   }
 }
-
 .summary-card {
   margin-top: 10px;
   padding: 12px;
@@ -454,7 +456,6 @@ th {
   font-size: clamp(22px, 3vw, 34px);
   letter-spacing: 1px;
 }
-
 .winner-card {
   animation: winnerPop 0.6s ease;
   position: relative;
@@ -584,6 +585,164 @@ th {
     opacity: 0;
   }
 }
+.share-preview-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.82);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 99999;
+}
+
+.share-preview-card {
+  width: min(700px, 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.98),
+    rgba(240,242,255,0.98)
+  );
+  border-radius: 28px;
+  border: 5px solid #EA2128;
+  box-shadow:
+    0 0 50px rgba(0,0,0,0.45),
+    0 0 20px rgba(234,33,40,0.2);
+  overflow: hidden;
+  animation: shareCardPop 0.35s ease;
+}
+
+@keyframes shareCardPop {
+  0% {
+    transform: scale(0.82);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.share-preview-top {
+  padding: 28px 24px 20px;
+  text-align: center;
+}
+
+.share-preview-logo {
+  max-width: 260px;
+  margin: 0 auto 22px;
+  background: white;
+  border-radius: 16px;
+  padding: 10px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.12);
+}
+
+.share-preview-logo img {
+  width: 100%;
+  display: block;
+}
+
+.share-preview-title {
+  font-size: clamp(42px, 6vw, 72px);
+  font-weight: 900;
+  color: #EA2128;
+  margin-bottom: 10px;
+  line-height: 1;
+}
+
+.share-preview-name {
+  font-size: clamp(36px, 6vw, 58px);
+  font-weight: 900;
+  color: #2E368F;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  word-break: break-word;
+}
+
+.share-preview-score {
+  font-size: clamp(22px, 3vw, 34px);
+  font-weight: 900;
+  color: #2E368F;
+  margin-bottom: 8px;
+}
+
+.share-preview-location {
+  font-size: clamp(18px, 3vw, 28px);
+  font-weight: 800;
+  color: #EA2128;
+}
+
+.share-preview-rankings {
+  padding: 0 24px 24px;
+  display: grid;
+  gap: 10px;
+}
+
+.share-preview-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #eef0ff;
+  color: #2E368F;
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.share-preview-row.first {
+  background: #fff0f1;
+  border: 3px solid #EA2128;
+  box-shadow: 0 0 14px rgba(234,33,40,0.15);
+}
+
+.share-preview-bottom {
+  background: #2E368F;
+  padding: 24px;
+}
+
+.share-preview-link {
+  display: block;
+  text-align: center;
+  color: white;
+  font-size: 22px;
+  font-weight: 900;
+  text-decoration: none;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
+
+.share-preview-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.share-preview-buttons button {
+  border: none;
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.18s ease;
+}
+
+.share-preview-buttons button:hover {
+  transform: scale(1.02);
+}
+
+.share-now-btn {
+  background: #EA2128;
+  color: white;
+}
+
+.share-close-btn {
+  background: white;
+  color: #2E368F;
+}
 
 @media (max-width: 700px) {
   body {
@@ -653,17 +812,25 @@ th {
   }
 
   .bottom-actions,
-  .winner-buttons {
+  .winner-buttons,
+  .share-preview-buttons {
     grid-template-columns: 1fr;
   }
 
   .summary-item,
-  .place-row {
+  .place-row,
+  .share-preview-row {
     grid-template-columns: 1fr;
   }
 
-  .place-row {
+  .place-row,
+  .share-preview-row {
     flex-direction: column;
     gap: 6px;
+    text-align: center;
+  }
+
+  .share-preview-link {
+    font-size: 18px;
   }
 }

@@ -14,10 +14,8 @@
         <div class="landing-logo">
           <img src="GlowZone360-LOGO-PNG.png" alt="Glow Zone 360 Logo" />
         </div>
-
         <h1>Digital Scorecard</h1>
         <p>Track your mini-golf game, show off the winner, and share your GlowZone 360 score.</p>
-
         <button id="startGameBtn" class="main-btn">Start Game</button>
       </div>
     </section>
@@ -27,14 +25,11 @@
         <div class="landing-logo">
           <img src="GlowZone360-LOGO-PNG.png" alt="Glow Zone 360 Logo" />
         </div>
-
         <h1>Choose Location</h1>
-
         <div class="location-buttons">
           <button class="location-btn" data-location="Brampton">Brampton</button>
           <button class="location-btn" data-location="Mississauga">Mississauga</button>
         </div>
-
         <button id="backToLandingBtn" class="secondary-btn">← Back</button>
       </div>
     </section>
@@ -45,7 +40,6 @@
           <h1>SCORE CARD</h1>
           <div id="locationText" class="location-text">Location: Not Selected</div>
         </div>
-
         <div class="logo-box">
           <img src="GlowZone360-LOGO-PNG.png" alt="Glow Zone 360 Logo" />
         </div>
@@ -131,17 +125,43 @@
         </div>
 
         <div class="winner-title">🏆 WINNER 🏆</div>
-
         <div id="winnerName" class="winner-name">PLAYER</div>
         <div id="winnerScore" class="winner-score">Winning Score: 0</div>
         <div id="winnerLocation" class="winner-location"></div>
-
         <div id="winnerPlacements" class="winner-placements"></div>
 
         <div class="winner-buttons">
           <button id="winnerShareBtn" class="main-btn">Share Result</button>
           <button id="playAgainBtn" class="secondary-btn">Play Again</button>
           <button id="newGameBtn" class="main-btn">New Game</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="shareModal" class="share-modal hidden">
+      <div class="share-backdrop"></div>
+
+      <div class="share-card">
+        <button id="closeShareModalBtn" class="close-share">×</button>
+
+        <div class="share-logo">
+          <img src="GlowZone360-LOGO-PNG.png" alt="Glow Zone 360 Logo" />
+        </div>
+
+        <div class="share-title">🏆 WINNER 🏆</div>
+        <div id="shareWinnerName" class="share-winner-name">PLAYER</div>
+        <div id="shareWinnerScore" class="share-winner-score">Winning Score: 0</div>
+        <div id="shareWinnerLocation" class="share-winner-location"></div>
+
+        <div id="shareRankings" class="share-rankings"></div>
+
+        <a class="share-website" href="https://glowzone360.com" target="_blank">
+          glowzone360.com
+        </a>
+
+        <div class="share-actions">
+          <button id="shareNowBtn" class="main-btn">Share Now</button>
+          <button id="copyShareBtn" class="secondary-btn">Copy Text</button>
         </div>
       </div>
     </section>

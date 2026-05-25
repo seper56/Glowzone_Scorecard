@@ -45,25 +45,17 @@ const newGameBtn = document.getElementById("newGameBtn");
 const winnerShareBtn = document.getElementById("winnerShareBtn");
 
 function saveGame() {
-  const gameData = {
-    selectedLocation,
-    players
-  };
-
-  localStorage.setItem(storageKey, JSON.stringify(gameData));
+  localStorage.setItem(storageKey, JSON.stringify({ selectedLocation, players }));
 }
 
 function loadGame() {
   const savedGame = localStorage.getItem(storageKey);
-
   if (!savedGame) return;
 
   try {
     const gameData = JSON.parse(savedGame);
 
-    if (gameData.selectedLocation) {
-      selectedLocation = gameData.selectedLocation;
-    }
+    if (gameData.selectedLocation) selectedLocation = gameData.selectedLocation;
 
     if (Array.isArray(gameData.players) && gameData.players.length > 0) {
       players = gameData.players.map((player, index) => ({
@@ -193,9 +185,7 @@ function renderHeader() {
 
   document.querySelectorAll(".player-name-input").forEach((input) => {
     input.addEventListener("focus", (event) => {
-      if (event.target.value === "NAME HERE") {
-        event.target.value = "";
-      }
+      if (event.target.value === "NAME HERE") event.target.value = "";
     });
 
     input.addEventListener("blur", (event) => {
@@ -261,9 +251,7 @@ function renderBody() {
       </tr>
     `;
 
-    if (holeIndex === 8) {
-      html += makeSummaryRow("FRONT", 27, 0, 8);
-    }
+    if (holeIndex === 8) html += makeSummaryRow("FRONT", 27, 0, 8);
   });
 
   scoreBody.innerHTML = html;
@@ -278,11 +266,7 @@ function renderFoot() {
 
 function updateSummaryRowsOnly() {
   const frontRow = scoreBody.querySelector(".summary-row");
-
-  if (frontRow) {
-    frontRow.outerHTML = makeSummaryRow("FRONT", 27, 0, 8);
-  }
-
+  if (frontRow) frontRow.outerHTML = makeSummaryRow("FRONT", 27, 0, 8);
   renderFoot();
 }
 
@@ -291,7 +275,6 @@ function attachScoreEvents() {
     input.addEventListener("input", (event) => {
       const player = players.find((p) => p.id === Number(event.target.dataset.playerId));
       const holeIndex = Number(event.target.dataset.holeIndex);
-
       if (!player) return;
 
       player.scores[holeIndex] = event.target.value;
@@ -361,9 +344,7 @@ function addPlayer() {
 
 function removeLastPlayer() {
   if (players.length <= 1) return;
-
   players.pop();
-
   saveGame();
   renderEverything();
 }
@@ -377,7 +358,6 @@ function launchConfetti() {
     piece.style.left = `${Math.random() * 100}%`;
     piece.style.animationDuration = `${2 + Math.random() * 2.5}s`;
     piece.style.animationDelay = `${Math.random() * 0.8}s`;
-    piece.style.transform = `rotate(${Math.random() * 360}deg)`;
     confettiWrap.appendChild(piece);
   }
 
@@ -404,11 +384,7 @@ function showWinnerPage() {
 
   winnerPlacements.innerHTML = ranked.map((player, index) => `
     <div class="place-row ${index === 0 ? "first" : ""}">
-      <div>
-        ${index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "🎯"}
-        ${escapeHtml(player.name)}
-      </div>
-
+      <div>${index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "🎯"} ${escapeHtml(player.name)}</div>
       <div>${player.total}</div>
     </div>
   `).join("");
@@ -455,19 +431,87 @@ function shareWinnerResult() {
     return;
   }
 
-  const locationPart = selectedLocation ? ` at GlowZone 360 ${selectedLocation}` : " at GlowZone 360";
-  const message = `🏆 ${leader.name} won${locationPart} with a score of ${leader.total}!`;
+  const ranked = getStats()
+    .filter((player) => player.hasAny)
+    .sort((a, b) => a.total - b.total);
 
-  if (navigator.share) {
-    navigator.share({
-      title: "GlowZone 360 Winner",
-      text: message,
-      url: window.location.href
-    });
-  } else {
-    navigator.clipboard.writeText(`${message} ${window.location.href}`);
-    alert("Winner message copied!");
-  }
+  const existingOverlay = document.querySelector(".share-preview-overlay");
+  if (existingOverlay) existingOverlay.remove();
+
+  const overlay = document.createElement("div");
+  overlay.className = "share-preview-overlay";
+
+  overlay.innerHTML = `
+    <div class="share-preview-card">
+      <div class="share-preview-top">
+        <div class="share-preview-logo">
+          <img src="GlowZone360-LOGO-PNG.png" alt="GlowZone Logo" />
+        </div>
+
+        <div class="share-preview-title">🏆 WINNER 🏆</div>
+        <div class="share-preview-name">${escapeHtml(leader.name)}</div>
+        <div class="share-preview-score">Winning Score: ${leader.total}</div>
+        <div class="share-preview-location">
+          ${selectedLocation ? `GlowZone 360 ${selectedLocation}` : "GlowZone 360"}
+        </div>
+      </div>
+
+      <div class="share-preview-rankings">
+        ${ranked.map((player, index) => `
+          <div class="share-preview-row ${index === 0 ? "first" : ""}">
+            <div>${index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "🎯"} ${escapeHtml(player.name)}</div>
+            <div>${player.total}</div>
+          </div>
+        `).join("")}
+      </div>
+
+      <div class="share-preview-bottom">
+        <a class="share-preview-link" href="https://glowzone360.com" target="_blank">
+          Visit GlowZone360.com
+        </a>
+
+        <div class="share-preview-buttons">
+          <button id="shareNowBtn" class="share-now-btn">Share Now</button>
+          <button id="closeShareCardBtn" class="share-close-btn">Close</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  document.getElementById("closeShareCardBtn").addEventListener("click", () => {
+    overlay.remove();
+  });
+
+  document.getElementById("shareNowBtn").addEventListener("click", async () => {
+    const locationPart = selectedLocation ? ` at GlowZone 360 ${selectedLocation}` : " at GlowZone 360";
+
+    const message =
+`🏆 ${leader.name} won${locationPart} with a score of ${leader.total}!
+
+Check out GlowZone 360:
+https://glowzone360.com`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "GlowZone 360 Winner",
+          text: message,
+          url: "https://glowzone360.com"
+        });
+      } catch {
+        console.log("Share cancelled");
+      }
+    } else {
+      await navigator.clipboard.writeText(message);
+      alert("Winner result copied!");
+    }
+  });
+
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) overlay.remove();
+  });
 }
 
 startGameBtn.addEventListener("click", showLocation);
