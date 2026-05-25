@@ -29,6 +29,7 @@ const winnerName = document.getElementById("winnerName");
 const winnerScore = document.getElementById("winnerScore");
 const winnerLocation = document.getElementById("winnerLocation");
 const winnerPlacements = document.getElementById("winnerPlacements");
+const confettiWrap = document.getElementById("confettiWrap");
 
 const startGameBtn = document.getElementById("startGameBtn");
 const backToLandingBtn = document.getElementById("backToLandingBtn");
@@ -367,6 +368,24 @@ function removeLastPlayer() {
   renderEverything();
 }
 
+function launchConfetti() {
+  confettiWrap.innerHTML = "";
+
+  for (let i = 0; i < 80; i++) {
+    const piece = document.createElement("span");
+    piece.className = "confetti-piece";
+    piece.style.left = `${Math.random() * 100}%`;
+    piece.style.animationDuration = `${2 + Math.random() * 2.5}s`;
+    piece.style.animationDelay = `${Math.random() * 0.8}s`;
+    piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+    confettiWrap.appendChild(piece);
+  }
+
+  setTimeout(() => {
+    confettiWrap.innerHTML = "";
+  }, 5000);
+}
+
 function showWinnerPage() {
   const ranked = getStats()
     .filter((player) => player.hasAny)
@@ -397,6 +416,7 @@ function showWinnerPage() {
   hideAllPages();
   winnerPage.classList.remove("hidden");
   window.scrollTo(0, 0);
+  launchConfetti();
 }
 
 function resetScores() {
