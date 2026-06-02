@@ -219,8 +219,7 @@ function renderHeader() {
 function makeSummaryRow(label, parTotal, start, end) {
   return `
     <tr class="summary-row">
-      <td>${label}</td>
-      <td>${parTotal}</td>
+      <td colspan="2">${label} ${parTotal}</td>
       ${players.map((player) => `<td>${sumScores(player.scores, start, end)}</td>`).join("")}
     </tr>
   `;

@@ -758,7 +758,7 @@ th {
   .score-panel,
   .rules-panel,
   .winner-page {
-    padding: 8px;
+    padding: 6px;
   }
 
   .top-header {
@@ -774,41 +774,49 @@ th {
     grid-template-columns: 1fr 1fr;
   }
 
+  .table-wrap {
+    overflow-x: hidden;
+  }
+
   table {
-    min-width: 610px;
+    min-width: 100%;
+    width: 100%;
+    table-layout: fixed;
   }
 
   th,
   td {
-    height: 40px;
-    font-size: 14px;
+    height: 34px;
+    font-size: 11px;
+    padding: 1px;
+    border-width: 1px;
   }
 
   .hole-col {
-    width: 70px;
+    width: 38px;
   }
 
   .par-col {
-    width: 52px;
+    width: 30px;
   }
 
   .player-col {
-    width: 96px;
+    width: auto;
   }
 
   .hole-flag {
-    width: 42px;
-    height: 27px;
-    font-size: 18px;
+    width: 26px;
+    height: 20px;
+    font-size: 11px;
   }
 
   .player-name-input {
-    font-size: 14px;
+    font-size: 9px;
   }
 
   .score-input {
-    width: 46px;
-    font-size: 20px;
+    width: 100%;
+    font-size: 15px;
   }
 
   .bottom-actions,
